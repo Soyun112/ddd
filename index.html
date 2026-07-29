@@ -319,11 +319,25 @@
     historyEl.prepend(item);
   }
 
+  async function saveDraw(numbers) {
+    try {
+      const res = await fetch('/api/draw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ numbers }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+    } catch (err) {
+      console.error('DB 저장 실패:', err);
+    }
+  }
+
   drawBtn.addEventListener('click', () => {
     drawBtn.disabled = true;
     const numbers = drawNumbers();
     renderBalls(numbers);
     addHistory(numbers);
+    saveDraw(numbers);
     setTimeout(() => { drawBtn.disabled = false; }, 900);
   });
 
@@ -350,6 +364,7 @@
     const numbers = drawNumbers();
     renderBalls(numbers);
     addHistory(numbers);
+    saveDraw(numbers);
     return `번호를 뽑았어요! 🎉\n${numbers.join(', ')}`;
   }
 
