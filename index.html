@@ -349,6 +349,12 @@
     renderBalls(numbers);
     addHistory(numbers);
     saveDraw(numbers);
+    if (typeof gtag === 'function') {
+      gtag('event', 'lotto_draw', {
+        event_category: 'engagement',
+        event_label: numbers.join(','),
+      });
+    }
     setTimeout(() => { drawBtn.disabled = false; }, 900);
   });
 
